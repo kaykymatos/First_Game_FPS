@@ -18,10 +18,19 @@ namespace FPS_First_Game.Assets.Scripts
 
         Vector3 velocidadeCai;
 
+        public Transform cameraTransform;
+        public bool estaAbaixado;
+        public bool levantarBloqueado;
+        public float alturaLevantado, alturaAbaixado, posicaCameraEmPe, posicaoCameraAbaixado;
+        RaycastHit hit;
+
+
         // Start is called before the first frame update
         void Start()
         {
             controle = GetComponent<CharacterController>();
+            estaAbaixado = false;
+            cameraTransform = Camera.main.transform;
         }
 
         // Update is called once per frame
@@ -43,12 +52,50 @@ namespace FPS_First_Game.Assets.Scripts
 
             if (Input.GetButtonDown("Jump") && estaNoChao)
             {
-                velocidadeCai.y = Mathf.Sqrt(alturaPulo*-2f*gravidade);
+                velocidadeCai.y = Mathf.Sqrt(alturaPulo * -2f * gravidade);
             }
             velocidadeCai.y += gravidade * Time.deltaTime;
             controle.Move(velocidadeCai * Time.deltaTime);
-        }
 
+            if (estaAbaixado)
+            {
+                ChecaBloqueioAbaixado();
+            }
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                Abaixa();
+            }
+        }
+        void Abaixa()
+        {
+            if (levantarBloqueado||!estaNoChao)
+                return;
+
+            estaAbaixado = !estaAbaixado;
+            if (estaAbaixado)
+            {
+                controle.height = alturaAbaixado;
+                cameraTransform.localPosition = new Vector3(0, posicaoCameraAbaixado, 0);
+            }
+            else
+            {
+                controle.height = alturaLevantado;
+                cameraTransform.localPosition = new Vector3(0, posicaCameraEmPe, 0);
+            }
+        }
+        void ChecaBloqueioAbaixado()
+        {
+            Debug.DrawRay(cameraTransform.position, Vector3.up * 1.1f, Color.red);
+
+            if (Physics.Raycast(cameraTransform.position, Vector3.up, out hit, 1.1f))
+            {
+                levantarBloqueado = true;
+            }
+            else
+            {
+                levantarBloqueado = false;
+            }
+        }
         void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;

@@ -23,20 +23,21 @@ public class Respiracao : MonoBehaviour
             {
                 estaInspirando = !estaInspirando;
             }
-            else
+        }
+        else
+        {
+            movimento = Mathf.Lerp(movimento, minAltura, Time.deltaTime * 1 * forcaResp);
+            transform.localPosition = new Vector3(transform.localPosition.x, movimento, transform.localPosition.z);
+            if (movimento <= minAltura + 0.01f)
             {
-                movimento = Mathf.Lerp(movimento, minAltura, Time.deltaTime * 1 * forcaResp);
-                transform.localPosition = new Vector3(transform.localPosition.x, movimento, transform.localPosition.z);
-                if (movimento <= minAltura + 0.01f)
-                {
-                    estaInspirando = !estaInspirando;
-                }
-            }
-
-            if (forcaResp != 0)
-            {
-                forcaResp = Mathf.Lerp(forcaResp, 1f, Time.deltaTime * 0.2f);
+                estaInspirando = !estaInspirando;
             }
         }
+
+        if (forcaResp != 0)
+        {
+            forcaResp = Mathf.Lerp(forcaResp, 1f, Time.deltaTime * 0.2f);
+        }
+
     }
 }
