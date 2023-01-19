@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace FPS_First_Game.Assets.Scripts
+namespace Scripts.Personagem
 {
     public class MovimentaPersonagem : MonoBehaviour
     {
@@ -25,7 +25,7 @@ namespace FPS_First_Game.Assets.Scripts
         RaycastHit hit;
 
 
-        // Start is called before the first frame update
+        
         void Start()
         {
             controle = GetComponent<CharacterController>();
@@ -33,7 +33,7 @@ namespace FPS_First_Game.Assets.Scripts
             cameraTransform = Camera.main.transform;
         }
 
-        // Update is called once per frame
+        
         void Update()
         {
             estaNoChao = Physics.CheckSphere(checaChao.position, raioEsfera, chaoMask);
@@ -68,7 +68,7 @@ namespace FPS_First_Game.Assets.Scripts
         }
         void Abaixa()
         {
-            if (levantarBloqueado||!estaNoChao)
+            if (levantarBloqueado || !estaNoChao)
                 return;
 
             estaAbaixado = !estaAbaixado;
@@ -102,5 +102,4 @@ namespace FPS_First_Game.Assets.Scripts
             Gizmos.DrawSphere(checaChao.position, raioEsfera);
         }
     }
-
 }
