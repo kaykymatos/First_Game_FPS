@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.Personagem
@@ -25,7 +23,7 @@ namespace Scripts.Personagem
         RaycastHit hit;
 
 
-        
+
         void Start()
         {
             controle = GetComponent<CharacterController>();
@@ -33,7 +31,7 @@ namespace Scripts.Personagem
             cameraTransform = Camera.main.transform;
         }
 
-        
+
         void Update()
         {
             estaNoChao = Physics.CheckSphere(checaChao.position, raioEsfera, chaoMask);

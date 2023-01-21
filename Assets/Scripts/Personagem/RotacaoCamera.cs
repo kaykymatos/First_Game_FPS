@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.Personagem
@@ -10,14 +8,14 @@ namespace Scripts.Personagem
         public float anguloMin = -45f, anguloMax = 45f;
         public Transform transformPlayer;
         float rotacao = 0f;
-        
+
         void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
-        
+
         void Update()
         {
             float mouseX = Input.GetAxis("Mouse X") * sensibilidadeMouse * Time.deltaTime;

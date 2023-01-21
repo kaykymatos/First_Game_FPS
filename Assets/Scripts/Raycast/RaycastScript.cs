@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,7 +26,8 @@ namespace Scripts.Raycast
 
                         textBotao.text = "[E]";
                         textInfo.text = "Arrastar/Soltar";
-                    }else
+                    }
+                    else
                     if (hit.transform.gameObject.CompareTag("objPegar"))
                     {
                         objPegar = hit.transform.gameObject;
@@ -54,8 +53,8 @@ namespace Scripts.Raycast
                     textBotao.text = "";
                     textInfo.text = "";
                 }
-                
-               
+
+
 
             }
         }
