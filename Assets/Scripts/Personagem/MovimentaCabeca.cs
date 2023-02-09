@@ -17,10 +17,12 @@ namespace Scripts.Personagem
         AudioSource audioSourse;
         public AudioClip[] audioClip;
         public int indexPassos;
+        MovimentaPersonagem scriptMovimenta;
 
         private void Start()
         {
             audioSourse = GetComponent<AudioSource>();
+            scriptMovimenta = GetComponentInParent<MovimentaPersonagem>();
             indexPassos = 0;
         }
 
@@ -60,10 +62,11 @@ namespace Scripts.Personagem
             }
             transform.localPosition = salvaPosicao;
             SomPassos();
+            AtualizaCabeca();
         }
         void SomPassos()
         {
-            if (cortaOnda <= -0.95f && !audioSourse.isPlaying)
+            if (cortaOnda <= -0.95f && !audioSourse.isPlaying && scriptMovimenta.estaNoChao)
             {
                 audioSourse.clip = audioClip[indexPassos];
                 audioSourse.Play();
@@ -72,6 +75,24 @@ namespace Scripts.Personagem
                 {
                     indexPassos = 0;
                 }
+            }
+        }
+        void AtualizaCabeca()
+        {
+            if (scriptMovimenta.estaCorrendo)
+            {
+                velocidade = 0.25f;
+                forca = 0.25f;
+            }
+            else if (scriptMovimenta.estaAbaixado)
+            {
+                velocidade = 0.15f;
+                forca = 0.11f;
+            }
+            else
+            {
+                velocidade = 0.18f;
+                forca = 0.15f;
             }
         }
     }
