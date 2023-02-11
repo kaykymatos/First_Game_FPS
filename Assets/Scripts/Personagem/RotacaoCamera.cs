@@ -4,10 +4,14 @@ namespace Scripts.Personagem
 {
     public class RotacaoCamera : MonoBehaviour
     {
+        [Header("Valores Sensibilidade, angulos, rotação")]
         public float sensibilidadeMouse = 100f;
-        public float anguloMin = -45f, anguloMax = 45f;
+        public float anguloMin = -45f;
+        public float anguloMax = 45f;
+        private float rotacao = 0f;
+
+        [Header("Player")]
         public Transform transformPlayer;
-        float rotacao = 0f;
 
         void Start()
         {

@@ -5,9 +5,13 @@ namespace Scripts.Raycast
     [RequireComponent(typeof(RaycastScript))]
     public class AcoesRaycast : MonoBehaviour
     {
-        RaycastScript raycastScript;
+        private RaycastScript raycastScript;
+        private float distancia;
+
+        [Header("Verificação")]
         public bool pegou;
-        float distancia;
+
+        [Header("Objeto")]
         public GameObject salvaObjeto;
 
         void Start()

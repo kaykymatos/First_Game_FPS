@@ -18,7 +18,7 @@ namespace Scripts.Personagem
         public bool estaNoChao;
 
         [Header("Verifica Abaixado")]
-        Vector3 velocidadeCai;
+        private Vector3 velocidadeCai;
         public Transform cameraTransform;
         public bool estaAbaixado;
         public bool levantarBloqueado;
@@ -34,6 +34,12 @@ namespace Scripts.Personagem
         public float hp;
         public bool cansado;
         public Respiracao scriptResp;
+
+        [Header("Sons")]
+        public AudioClip[] audiosPulo;
+        private AudioSource audioPulo;
+        private bool noAr;
+
         void Start()
         {
             controle = GetComponent<CharacterController>();
@@ -43,6 +49,8 @@ namespace Scripts.Personagem
             cansado = false;
             hp = 100f;
             cameraTransform = Camera.main.transform;
+            audioPulo = GetComponent<AudioSource>();
+            noAr = false;
         }
 
 
@@ -52,6 +60,7 @@ namespace Scripts.Personagem
             MovimentoAbaixa();
             Inputs();
             CondicaoDoPlayer();
+            SomPulo();
         }
         void Abaixa()
         {
@@ -60,6 +69,19 @@ namespace Scripts.Personagem
 
             estaAbaixado = !estaAbaixado;
 
+        }
+        void SomPulo()
+        {
+            if (!estaNoChao)
+            {
+                noAr = true;
+            }
+            if (estaNoChao && noAr)
+            {
+                noAr = false;
+                audioPulo.clip = audiosPulo[1];
+                audioPulo.Play();
+            }
         }
         void Verificacoes()
         {
@@ -124,6 +146,8 @@ namespace Scripts.Personagem
             if (Input.GetButtonDown("Jump") && estaNoChao)
             {
                 velocidadeCai.y = Mathf.Sqrt(alturaPulo * -2f * gravidade);
+                audioPulo.clip = audiosPulo[0];
+                audioPulo.Play();
             }
         }
         void CondicaoDoPlayer()

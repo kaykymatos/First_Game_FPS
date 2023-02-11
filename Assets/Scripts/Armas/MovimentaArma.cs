@@ -5,10 +5,12 @@ namespace Scripts.Armas
 
     public class MovimentaArma : MonoBehaviour
     {
+
+        [Header("Valores")]
         public float valor;
         public float suavizaValor;
         public float valorMaximo;
-        Vector3 posicaoInicial;
+        private Vector3 posicaoInicial;
 
         void Start()
         {

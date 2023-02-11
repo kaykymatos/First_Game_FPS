@@ -2,11 +2,13 @@ using UnityEngine;
 
 namespace Scripts.ObjetosScript
 {
-
     public class OnMouse : MonoBehaviour
     {
-        public Material selecionado, naoSelecionado;
-        Renderer rend;
+
+        [Header("Material")]
+        public Material selecionado;
+        public Material naoSelecionado;
+        private Renderer rend;
 
         void Start()
         {

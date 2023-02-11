@@ -5,9 +5,16 @@ namespace Scripts.Raycast
 {
     public class RaycastScript : MonoBehaviour
     {
+        private RaycastHit hit;
+
+        [Header("Distância Objeto")]
         public float distanciaAlvo;
-        public GameObject objArrastar, objPegar;
-        RaycastHit hit;
+
+        [Header("Objetos Pega e Arrasta")]
+        public GameObject objArrastar;
+        public GameObject objPegar;
+
+        [Header("Textos informações")]
         public Text textBotao, textInfo;
 
         void Update()

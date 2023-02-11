@@ -4,20 +4,23 @@ namespace Scripts.Personagem
 {
     public class MovimentaCabeca : MonoBehaviour
     {
+        [Header("Valores(Força, velocidade, tempo...)")]
         private float tempo = 0.0f;
         public float velocidade = 0.15f;
         public float forca = 0.1f;
         public float pontoDeOrigem = 0.0f;
 
-        float cortaOnda;
-        float horizontal;
-        float vertical;
-        Vector3 salvaPosicao;
+        [Header("Valores Posição")]
+        private float cortaOnda;
+        private float horizontal;
+        private float vertical;
+        private Vector3 salvaPosicao;
 
-        AudioSource audioSourse;
+        [Header("Audios")]
+        private AudioSource audioSourse;
         public AudioClip[] audioClip;
         public int indexPassos;
-        MovimentaPersonagem scriptMovimenta;
+        private MovimentaPersonagem scriptMovimenta;
 
         private void Start()
         {

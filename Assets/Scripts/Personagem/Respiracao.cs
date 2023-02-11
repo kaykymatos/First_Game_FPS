@@ -4,15 +4,17 @@ namespace Scripts.Personagem
 {
     public class Respiracao : MonoBehaviour
     {
+        private float movimento;
+
+        [Header("Verificação")]
         public bool estaInspirando = true;
+
+        [Header("Valores Movimento")]
         public float minAltura = -0.035f;
         public float maxAltura = 0.035f;
 
-
         [Range(0f, 5f)]
         public float forcaResp = 1f;
-
-        float movimento;
 
         void Update()
         {
