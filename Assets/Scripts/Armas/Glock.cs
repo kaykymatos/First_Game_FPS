@@ -15,10 +15,14 @@ namespace Scripts.Armas
         public GameObject efeitoTiro;
         public GameObject posEfeitoTiro;
 
+        public ParticleSystem rastroBala;
+        public AudioSource audioArma;
+
         void Start()
         {
             estaAtirando = false;
             anim = GetComponent<Animator>();
+            audioArma = GetComponent<AudioSource>();
         }
 
         void Update()
@@ -27,9 +31,17 @@ namespace Scripts.Armas
             {
                 if (!estaAtirando)
                 {
+                    rastroBala.Play();
+
                     estaAtirando = true;
                     StartCoroutine(Atirando());
+                    audioArma.Play();
+
                 }
+            }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                anim.Play("Recarrega");
             }
         }
         IEnumerator Atirando()
@@ -59,6 +71,7 @@ namespace Scripts.Armas
 
             yield return new WaitForSeconds(0.3f);
             estaAtirando = false;
+            audioArma.Stop();
         }
         void InstanciaEfeitos()
         {
