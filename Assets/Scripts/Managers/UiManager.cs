@@ -5,7 +5,6 @@ using UnityEngine.UI;
 namespace Scripts.Managers
 {
 
-
     public class UiManager : MonoBehaviour
     {
 

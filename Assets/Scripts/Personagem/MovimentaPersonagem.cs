@@ -70,6 +70,13 @@ namespace Scripts.Personagem
             estaAbaixado = !estaAbaixado;
 
         }
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.gameObject.CompareTag("cabecaDesliza"))
+            {
+                controle.SimpleMove(transform.forward * 1000 * Time.deltaTime);
+            }
+        }
         void SomPulo()
         {
             if (!estaNoChao)
