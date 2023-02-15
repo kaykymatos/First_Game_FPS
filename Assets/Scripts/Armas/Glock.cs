@@ -168,7 +168,10 @@ namespace Scripts.Armas
             {
                 if (hit.transform.CompareTag("inimigo"))
                 {
-                    hit.transform.GetComponent<InimigoDente>().LevouDano(15);
+                    if (hit.transform.GetComponent<InimigoDente>())
+                    {
+                        hit.transform.GetComponent<InimigoDente>().LevouDano(15);
+                    }
                     GameObject particulaCriada = Instantiate(particulaSangue, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
                     particulaCriada.transform.parent = hit.transform;
                 }
