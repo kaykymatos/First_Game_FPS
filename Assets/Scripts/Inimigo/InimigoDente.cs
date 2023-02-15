@@ -41,6 +41,7 @@ public class InimigoDente : MonoBehaviour
     void ParaDeAndar()
     {
         navMesh.isStopped = true;
+        anim.SetTrigger("levouTiro");
         anim.SetBool("podeAndar", false) ;
 
     }
@@ -100,6 +101,8 @@ public class InimigoDente : MonoBehaviour
     }
     public void LevouDano(int dano)
     {
+        ParaDeAndar();
         hp -= dano;
+
     }
 }
