@@ -23,6 +23,7 @@ public class RegDoll : MonoBehaviour
         {
             regDollRigids[i].isKinematic = false;
             regdollCollider[i].isTrigger = false;
+            regDollRigids[i].transform.gameObject.layer = 10;
         }
         rigid.isKinematic = true;
         GetComponent<CapsuleCollider>().isTrigger = true;

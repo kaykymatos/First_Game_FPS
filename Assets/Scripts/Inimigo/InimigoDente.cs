@@ -1,3 +1,4 @@
+using Scripts.Personagem;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,37 +13,63 @@ public class InimigoDente : MonoBehaviour
     public int hp = 100;
     RegDoll regScript;
     public bool estaMorto;
+    public GameObject objetoDesliza;
+    public bool bravo;
+    public Renderer render;
+    public bool invencivel;
+    public AudioClip[] sonsMonstro;
+    public AudioSource audioMonstro;
 
     // Start is called before the first frame update
     void Start()
     {
+        invencivel = false;
         navMesh = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
         anim = GetComponent<Animator>();
         regScript = GetComponent<RegDoll>();
         regScript.DesativarRegdoll();
+        audioMonstro = GetComponent<AudioSource>();
+        render = GetComponentInChildren<Renderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        distanciaPlayer = Vector3.Distance(transform.position, player.transform.position);
-        VaiAtrasPlayer();
-        OlhaParaPlayer();
-        if(hp<=0 && !estaMorto)
+        if (!estaMorto)
         {
-            estaMorto = true;
-            ParaDeAndar();
-            regScript.AtivaRegdoll();
-
-            this.enabled = false;
+            if (hp <= 50 && !bravo)
+            {
+                bravo = true;
+                anim.ResetTrigger("levouTiro");
+                ParaDeAndar();
+                anim.CrossFade("Zombie Scream", 0.2f);
+                render.material.color = Color.red;
+                velocidade = 8;
+            }
+            distanciaPlayer = Vector3.Distance(transform.position, player.transform.position);
+            VaiAtrasPlayer();
+            OlhaParaPlayer();
+            if (hp <= 0 && !estaMorto)
+            {
+                Morre();
+                objetoDesliza.SetActive(false);
+                estaMorto = true;
+                ParaDeAndar();
+                regScript.AtivaRegdoll();
+            }
         }
+
+    }
+    public void DaDanoPlayer()
+    {
+        player.GetComponent<MovimentaPersonagem>().hp -= 10;
     }
     void ParaDeAndar()
     {
         navMesh.isStopped = true;
-        anim.SetTrigger("levouTiro");
-        anim.SetBool("podeAndar", false) ;
+        anim.SetBool("podeAndar", false);
+        CorrigeRigEntra();
 
     }
     void OlhaParaPlayer()
@@ -101,8 +128,55 @@ public class InimigoDente : MonoBehaviour
     }
     public void LevouDano(int dano)
     {
-        ParaDeAndar();
-        hp -= dano;
+        int n;
+        n = Random.Range(0, 10);
+        if (n % 2 == 0 && !bravo)
+        {
+            anim.SetTrigger("levouTiro");
+            ParaDeAndar();
+        }
+        if (!invencivel)
+        {
+            hp -= dano;
+        }
+
 
     }
+    public void FicaInvencivel()
+    {
+        invencivel = true;
+    }
+    public void SaiInvencivel()
+    {
+        invencivel = false;
+        anim.speed = 2;
+
+    }
+    public void PassoMosntro()
+    {
+        audioMonstro.volume = 0.05f;
+        audioMonstro.PlayOneShot(sonsMonstro[0]);
+    }
+    public void SenteDor()
+    {
+        audioMonstro.volume = 1f;
+        audioMonstro.clip = sonsMonstro[1];
+        audioMonstro.Play();
+    }
+
+    public void Grito()
+    {
+        audioMonstro.volume = 1f;
+        audioMonstro.clip = sonsMonstro[2];
+        audioMonstro.Play();
+    }
+    public void Morre()
+    {
+        audioMonstro.volume = 1f;
+        audioMonstro.clip = sonsMonstro[3];
+        audioMonstro.Play();
+    }
+
+
+
 }
