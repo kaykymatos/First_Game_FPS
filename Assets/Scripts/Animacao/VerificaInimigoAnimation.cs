@@ -1,11 +1,14 @@
 using UnityEngine;
 
-public class VerificaInimigoAnimation : StateMachineBehaviour
+namespace Scripts.Animacao
 {
-    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public class VerificaInimigoAnimation : StateMachineBehaviour
     {
-        animator.SetBool("podeAndar", true);
-    }
+        // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+        override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            animator.SetBool("podeAndar", true);
+        }
 
+    }
 }

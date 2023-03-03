@@ -1,3 +1,4 @@
+using Scripts.Inimigo;
 using Scripts.Managers;
 using System.Collections;
 using UnityEngine;
