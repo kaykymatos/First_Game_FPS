@@ -19,6 +19,8 @@ namespace Scripts.Managers
         public Text municao;
         public Image imagemModoTiro;
         public Sprite[] modoTiro;
+        public Sprite[] spriteItens;
+        public Image iconeImagem;
 
         [Header("Mira")]
         public RectTransform mira;

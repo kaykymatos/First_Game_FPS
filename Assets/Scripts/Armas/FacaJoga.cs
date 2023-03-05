@@ -32,13 +32,11 @@ namespace Scripts.Armas
             if (col.gameObject.CompareTag("inimigo"))
             {
                 if (col.transform.gameObject.GetComponent<InimigoDente>())
-                {
                     col.transform.gameObject.GetComponent<InimigoDente>().LevouDano(20);
-                }
+
                 if (col.transform.gameObject.GetComponent<InimigoRange>())
-                {
                     col.transform.gameObject.GetComponent<InimigoRange>().LevouDano(20);
-                }
+
                 Instantiate(sangue, transform.position, Quaternion.Euler(0, 90, 0));
                 GameObject somFaca = Instantiate(som, transform.position, Quaternion.Euler(0, 0, 0));
                 Destroy(somFaca, 2);

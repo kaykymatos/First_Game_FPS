@@ -1,4 +1,5 @@
 using Scripts.Armas;
+using Scripts.Managers;
 using Scripts.Personagem;
 using UnityEngine;
 
@@ -54,9 +55,7 @@ namespace Scripts.Raycast
             scriptMovimenta.hp += 50;
             scriptMovimenta.hp = Mathf.Clamp(scriptMovimenta.hp, 0, 100);
 
-            if (GetComponentInChildren<Glock>())
-                GetComponentInChildren<Glock>().carregador = 3;
-
+            ItensManager.instance.itens[1].GetComponent<Glock>().carregador = 3;
             Destroy(raycastScript.objPegar);
         }
         void Arrastar()

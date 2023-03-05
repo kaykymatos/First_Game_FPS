@@ -13,7 +13,7 @@ namespace Scripts.Armas
 
         void Update()
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Fire1") && !anim.GetBool("OcorreAcao"))
             {
                 anim.Play("AtiraFaca");
             }
