@@ -16,10 +16,13 @@ namespace Scripts.Raycast
         [Header("Objeto")]
         public GameObject salvaObjeto;
 
+        MovimentaPersonagem scriptMovimenta;
+
         void Start()
         {
             raycastScript = GetComponent<RaycastScript>();
             pegou = false;
+            scriptMovimenta = GetComponentInParent<MovimentaPersonagem>();
         }
 
         void Update()
@@ -48,7 +51,8 @@ namespace Scripts.Raycast
         }
         void Pegar()
         {
-            GetComponentInParent<MovimentaPersonagem>().hp += 50;
+            scriptMovimenta.hp += 50;
+            scriptMovimenta.hp = Mathf.Clamp(scriptMovimenta.hp, 0, 100);
             GetComponentInChildren<Glock>().carregador = 3;
             Destroy(raycastScript.objPegar);
         }

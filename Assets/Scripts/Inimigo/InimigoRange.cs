@@ -62,6 +62,7 @@ namespace Scripts.Inimigo
                     objetoDesliza.SetActive(false);
                     Morre();
                     GetComponent<DropItem>().Dropa();
+                    pedraPermanete.SetActive(false);
 
                 }
                 if (usaCurvaAnimacao && anim.IsInTransition(0))

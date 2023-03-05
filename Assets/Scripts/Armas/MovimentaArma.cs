@@ -5,7 +5,6 @@ namespace Scripts.Armas
 
     public class MovimentaArma : MonoBehaviour
     {
-
         [Header("Valores")]
         public float valor;
         public float suavizaValor;
@@ -16,7 +15,6 @@ namespace Scripts.Armas
         {
             posicaoInicial = transform.localPosition;
         }
-
 
         void Update()
         {
@@ -29,5 +27,4 @@ namespace Scripts.Armas
             transform.localPosition = Vector3.Lerp(transform.localPosition, finalPosition + posicaoInicial, Time.deltaTime * suavizaValor);
         }
     }
-
 }

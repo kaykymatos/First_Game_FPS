@@ -5,7 +5,6 @@ namespace Scripts.Inimigo
     public class DropItem : MonoBehaviour
     {
         public GameObject itemDrop;
-
         public void Dropa()
         {
             int n = Random.Range(0, 10);

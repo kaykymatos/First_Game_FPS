@@ -4,8 +4,6 @@ using UnityEngine.AI;
 
 namespace Scripts.Inimigo
 {
-
-
     public class InimigoDente : MonoBehaviour
     {
         public NavMeshAgent navMesh;
@@ -25,7 +23,6 @@ namespace Scripts.Inimigo
         public AudioSource audioMonstro;
         public CapsuleCollider col;
 
-        // Start is called before the first frame update
         void Start()
         {
             invencivel = false;
@@ -39,7 +36,6 @@ namespace Scripts.Inimigo
             col = GetComponent<CapsuleCollider>();
         }
 
-        // Update is called once per frame
         void Update()
         {
             if (!estaMorto)
@@ -69,7 +65,6 @@ namespace Scripts.Inimigo
                     GetComponent<DropItem>().Dropa();
                 }
             }
-
         }
         public void DaDanoPlayer()
         {
