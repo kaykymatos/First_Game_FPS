@@ -38,6 +38,14 @@ namespace Scripts.Inimigo
             this.enabled = false;
 
         }
+        public IEnumerator SomeMorto()
+        {
+            yield return new WaitForSeconds(10);
+            rigid.isKinematic = false;
+            DesativarRegdoll();
+            yield return new WaitForSeconds(4);
+            Destroy(this.gameObject);
+        }
         public void DesativarRegdoll()
         {
             Rigidbody[] rigs = GetComponentsInChildren<Rigidbody>();

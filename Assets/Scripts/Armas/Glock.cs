@@ -153,6 +153,17 @@ namespace Scripts.Armas
                 Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, 60, Time.deltaTime * 10);
             }
         }
+        void InimigoVerificadorDano()
+        {
+            if (hit.transform.GetComponent<InimigoDente>())
+            {
+                hit.transform.GetComponent<InimigoDente>().LevouDano(15);
+            }
+            else if (hit.transform.GetComponent<InimigoRange>())
+            {
+                hit.transform.GetComponent<InimigoRange>().LevouDano(15);
+            }
+        }
         IEnumerator Atirando()
         {
             float screenX = Screen.width / 2;
@@ -169,15 +180,15 @@ namespace Scripts.Armas
             {
                 if (hit.transform.CompareTag("inimigo"))
                 {
-                    if (hit.transform.GetComponent<InimigoDente>())
+                    if (hit.transform.GetComponent<InimigoDente>() || hit.transform.GetComponent<InimigoRange>())
                     {
-                        hit.transform.GetComponent<InimigoDente>().LevouDano(15);
+                        InimigoVerificadorDano();
                     }
-                    else if (hit.transform.GetComponentInParent<InimigoDente>())
+                    else if (hit.rigidbody != null && hit.transform.GetComponent<InimigoRange>())
                     {
-                        hit.transform.GetComponentInParent<InimigoDente>().LevouDano(15);
+                        AdicionaForca(ray, 900);
+                    }
 
-                    }
                     GameObject particulaCriada = Instantiate(particulaSangue, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
                     particulaCriada.transform.parent = hit.transform;
                 }

@@ -23,6 +23,7 @@ namespace Scripts.Inimigo
         public bool invencivel;
         public AudioClip[] sonsMonstro;
         public AudioSource audioMonstro;
+        public CapsuleCollider col;
 
         // Start is called before the first frame update
         void Start()
@@ -35,6 +36,7 @@ namespace Scripts.Inimigo
             regScript.DesativarRegdoll();
             audioMonstro = GetComponent<AudioSource>();
             render = GetComponentInChildren<Renderer>();
+            col = GetComponent<CapsuleCollider>();
         }
 
         // Update is called once per frame
@@ -61,6 +63,10 @@ namespace Scripts.Inimigo
                     estaMorto = true;
                     ParaDeAndar();
                     regScript.AtivaRegdoll();
+                    StartCoroutine(regScript.SomeMorto());
+                    col.direction = 2;
+                    col.center = new Vector3(0, 0, 0);
+                    GetComponent<DropItem>().Dropa();
                 }
             }
 
@@ -176,7 +182,7 @@ namespace Scripts.Inimigo
         public void Morre()
         {
             audioMonstro.volume = 1f;
-            audioMonstro.clip = sonsMonstro[3];
+            audioMonstro.clip = sonsMonstro[1];
             audioMonstro.Play();
         }
     }

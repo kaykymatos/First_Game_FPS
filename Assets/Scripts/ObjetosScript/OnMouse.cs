@@ -13,7 +13,6 @@ namespace Scripts.ObjetosScript
         void Start()
         {
             rend = GetComponent<Renderer>();
-
         }
 
         private void OnMouseEnter()

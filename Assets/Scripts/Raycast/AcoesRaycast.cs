@@ -1,3 +1,5 @@
+using Scripts.Armas;
+using Scripts.Personagem;
 using UnityEngine;
 
 namespace Scripts.Raycast
@@ -46,6 +48,8 @@ namespace Scripts.Raycast
         }
         void Pegar()
         {
+            GetComponentInParent<MovimentaPersonagem>().hp += 50;
+            GetComponentInChildren<Glock>().carregador = 3;
             Destroy(raycastScript.objPegar);
         }
         void Arrastar()

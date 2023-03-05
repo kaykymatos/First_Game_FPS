@@ -111,8 +111,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf7a3dd0d59897943aa3869867929ab9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hVelocidade: 15
+  hVelocidade: 30
   vVelocidade: 4
+  somCoque: {fileID: 9172797312693229971, guid: 14d98df6376bc204ab852598ff286372, type: 3}
 --- !u!54 &4626152768252820482
 Rigidbody:
   m_ObjectHideFlags: 0
