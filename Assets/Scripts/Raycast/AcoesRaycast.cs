@@ -53,7 +53,10 @@ namespace Scripts.Raycast
         {
             scriptMovimenta.hp += 50;
             scriptMovimenta.hp = Mathf.Clamp(scriptMovimenta.hp, 0, 100);
-            GetComponentInChildren<Glock>().carregador = 3;
+
+            if (GetComponentInChildren<Glock>())
+                GetComponentInChildren<Glock>().carregador = 3;
+
             Destroy(raycastScript.objPegar);
         }
         void Arrastar()
