@@ -4,98 +4,96 @@ namespace Scripts.Personagem
 {
     public class MovimentaCabeca : MonoBehaviour
     {
-        [Header("Valores(Força, velocidade, tempo...)")]
-        private float tempo = 0.0f;
-        public float velocidade = 0.15f;
-        public float forca = 0.1f;
-        public float pontoDeOrigem = 0.0f;
+        public Transform mao;
+        MovimentaPersonagem scriptPersonagem;
+        Vector3 posicaoMaoOrigem;
+        Vector3 posicaoMao;
+        Vector3 posicaoCabecaOrigem;
+        Vector3 posicaoCabeca;
 
-        [Header("Valores Posição")]
-        private float cortaOnda;
-        private float horizontal;
-        private float vertical;
-        private Vector3 salvaPosicao;
+        float paradoMao;
+        float andandoMao;
+        float andandoCabeca;
 
-        [Header("Audios")]
-        private AudioSource audioSourse;
-        public AudioClip[] audioClip;
-        public int indexPassos;
-        private MovimentaPersonagem scriptMovimenta;
-
-        private void Start()
+        int indexPassos;
+        public AudioClip[] passos;
+        AudioSource audioSource;
+        // Start is called before the first frame update
+        void Start()
         {
-            audioSourse = GetComponent<AudioSource>();
-            scriptMovimenta = GetComponentInParent<MovimentaPersonagem>();
+            scriptPersonagem = GetComponentInParent<MovimentaPersonagem>();
+            audioSource = GetComponent<AudioSource>();
             indexPassos = 0;
+            posicaoMaoOrigem = mao.localPosition;
+            posicaoCabecaOrigem = this.transform.localPosition;
+        }
+        void CalculaMovimento(float valorTempo, float intensidadeX, float intensidadeY, bool mao)
+        {
+            if (mao)
+            {
+                posicaoMao = posicaoMaoOrigem + new Vector3(Mathf.Cos(valorTempo) * intensidadeX, Mathf.Sin(valorTempo * 2) * intensidadeY, 0);
+            }
+            else
+            {
+                posicaoCabeca = posicaoCabecaOrigem + new Vector3(0, Mathf.Sin(valorTempo) * intensidadeY, 0);
+                if (Mathf.Sin(valorTempo) < -0.95f)
+                {
+                    SomPassos();
+                }
+            }
         }
 
+        // Update is called once per frame
         void Update()
         {
-            cortaOnda = 0.0f;
-            horizontal = Input.GetAxis("Horizontal");
-            vertical = Input.GetAxis("Vertical");
-
-            salvaPosicao = transform.localPosition;
+            float vertical = Input.GetAxis("Vertical");
+            float horizontal = Input.GetAxis("Horizontal");
 
             if (Mathf.Abs(horizontal) == 0 && Mathf.Abs(vertical) == 0)
             {
-                tempo = 0.0f;
+                CalculaMovimento(paradoMao, 0.01f, 0.01f, true);
+                paradoMao += Time.deltaTime;
+                mao.localPosition = Vector3.Lerp(mao.localPosition, posicaoMao, Time.deltaTime * 2);
+                this.transform.localPosition = Vector3.Lerp(this.transform.localPosition, Vector3.zero, Time.deltaTime * 10);
             }
-            else
+            else if (scriptPersonagem.estaCorrendo)
             {
-                cortaOnda = Mathf.Sin(tempo);
-                tempo += velocidade;
-                if (tempo > Mathf.PI * 2)
-                {
-                    tempo -= (Mathf.PI * 2);
-                }
-            }
+                CalculaMovimento(andandoMao, 0.07f, 0.07f, true);
+                andandoMao += Time.deltaTime * 4;
+                mao.localPosition = Vector3.Lerp(mao.localPosition, posicaoMao, Time.deltaTime * 6);
 
-            if (cortaOnda != 0)
-            {
-                float mudaMovimentacao = cortaOnda * forca;
-                float eixosTotais = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
-                eixosTotais = Mathf.Clamp(eixosTotais, 0.0f, 1.0f);
-                mudaMovimentacao = eixosTotais * mudaMovimentacao;
-                salvaPosicao.y = pontoDeOrigem + mudaMovimentacao;
+                CalculaMovimento(andandoCabeca, 0, 0.2f, false);
+                andandoCabeca += Time.deltaTime * 15;
+                this.transform.localPosition = Vector3.Lerp(this.transform.localPosition, posicaoCabeca, Time.deltaTime * 6);
+
             }
             else
             {
-                salvaPosicao.y = pontoDeOrigem;
+                CalculaMovimento(andandoMao, 0.035f, 0.035f, true);
+                andandoMao += Time.deltaTime * 2;
+                mao.localPosition = Vector3.Lerp(mao.localPosition, posicaoMao, Time.deltaTime * 6);
+
+                CalculaMovimento(andandoCabeca, 0, 0.15f, false);
+                andandoCabeca += Time.deltaTime * 10;
+                this.transform.localPosition = Vector3.Lerp(this.transform.localPosition, posicaoCabeca, Time.deltaTime * 6);
+
             }
-            transform.localPosition = salvaPosicao;
-            SomPassos();
-            AtualizaCabeca();
+            if (andandoCabeca > Mathf.PI * 2)
+            {
+                andandoCabeca -= (Mathf.PI * 2);
+            }
         }
         void SomPassos()
         {
-            if (cortaOnda <= -0.95f && !audioSourse.isPlaying && scriptMovimenta.estaNoChao)
+            if (!audioSource.isPlaying && scriptPersonagem.estaNoChao)
             {
-                audioSourse.clip = audioClip[indexPassos];
-                audioSourse.Play();
+                audioSource.clip = passos[indexPassos];
+                audioSource.Play();
                 indexPassos++;
                 if (indexPassos >= 4)
                 {
                     indexPassos = 0;
                 }
-            }
-        }
-        void AtualizaCabeca()
-        {
-            if (scriptMovimenta.estaCorrendo)
-            {
-                velocidade = 0.25f;
-                forca = 0.25f;
-            }
-            else if (scriptMovimenta.estaAbaixado)
-            {
-                velocidade = 0.15f;
-                forca = 0.11f;
-            }
-            else
-            {
-                velocidade = 0.18f;
-                forca = 0.15f;
             }
         }
     }
