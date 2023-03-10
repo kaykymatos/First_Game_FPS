@@ -5,6 +5,7 @@ namespace Scripts.Personagem
     public class MovimentaCabeca : MonoBehaviour
     {
         public Transform mao;
+
         MovimentaPersonagem scriptPersonagem;
         Vector3 posicaoMaoOrigem;
         Vector3 posicaoMao;
@@ -18,7 +19,7 @@ namespace Scripts.Personagem
         int indexPassos;
         public AudioClip[] passos;
         AudioSource audioSource;
-        // Start is called before the first frame update
+
         void Start()
         {
             scriptPersonagem = GetComponentInParent<MovimentaPersonagem>();
@@ -27,23 +28,7 @@ namespace Scripts.Personagem
             posicaoMaoOrigem = mao.localPosition;
             posicaoCabecaOrigem = this.transform.localPosition;
         }
-        void CalculaMovimento(float valorTempo, float intensidadeX, float intensidadeY, bool mao)
-        {
-            if (mao)
-            {
-                posicaoMao = posicaoMaoOrigem + new Vector3(Mathf.Cos(valorTempo) * intensidadeX, Mathf.Sin(valorTempo * 2) * intensidadeY, 0);
-            }
-            else
-            {
-                posicaoCabeca = posicaoCabecaOrigem + new Vector3(0, Mathf.Sin(valorTempo) * intensidadeY, 0);
-                if (Mathf.Sin(valorTempo) < -0.95f)
-                {
-                    SomPassos();
-                }
-            }
-        }
-
-        // Update is called once per frame
+        
         void Update()
         {
             float vertical = Input.GetAxis("Vertical");
@@ -81,6 +66,21 @@ namespace Scripts.Personagem
             if (andandoCabeca > Mathf.PI * 2)
             {
                 andandoCabeca -= (Mathf.PI * 2);
+            }
+        }
+        void CalculaMovimento(float valorTempo, float intensidadeX, float intensidadeY, bool mao)
+        {
+            if (mao)
+            {
+                posicaoMao = posicaoMaoOrigem + new Vector3(Mathf.Cos(valorTempo) * intensidadeX, Mathf.Sin(valorTempo * 2) * intensidadeY, 0);
+            }
+            else
+            {
+                posicaoCabeca = posicaoCabecaOrigem + new Vector3(0, Mathf.Sin(valorTempo) * intensidadeY, 0);
+                if (Mathf.Sin(valorTempo) < -0.95f)
+                {
+                    SomPassos();
+                }
             }
         }
         void SomPassos()
