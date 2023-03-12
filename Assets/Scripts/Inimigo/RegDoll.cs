@@ -6,19 +6,14 @@ namespace Scripts.Inimigo
 {
     public class RegDoll : MonoBehaviour
     {
-        List<Rigidbody> regDollRigids = new List<Rigidbody>();
+        List<Rigidbody> regDollRigids = new();
         public Rigidbody rigid;
-        List<Collider> regdollCollider = new List<Collider>();
+        List<Collider> regdollCollider = new();
         void Start()
         {
             rigid = GetComponent<Rigidbody>();
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
         public void AtivaRegdoll()
         {
             for (int i = 0; i < regDollRigids.Count; i++)

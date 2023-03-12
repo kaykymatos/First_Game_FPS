@@ -29,6 +29,7 @@ namespace Scripts.Inimigo
             if (collision.gameObject.CompareTag("Player"))
             {
                 player.GetComponent<MovimentaPersonagem>().hp -= 30;
+                player.GetComponent<MovimentaPersonagem>().SomDano();
             }
             CriaSomChoque();
 

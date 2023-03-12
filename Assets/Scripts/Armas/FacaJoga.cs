@@ -34,6 +34,7 @@ namespace Scripts.Armas
                 if (col.transform.gameObject.GetComponent<InimigoDente>())
                     col.transform.gameObject.GetComponent<InimigoDente>().LevouDano(20);
 
+
                 if (col.transform.gameObject.GetComponent<InimigoRange>())
                     col.transform.gameObject.GetComponent<InimigoRange>().LevouDano(20);
 

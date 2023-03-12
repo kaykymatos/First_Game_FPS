@@ -69,6 +69,8 @@ namespace Scripts.Inimigo
         public void DaDanoPlayer()
         {
             player.GetComponent<MovimentaPersonagem>().hp -= 10;
+            player.GetComponent<MovimentaPersonagem>().SomDano();
+
         }
         void ParaDeAndar()
         {

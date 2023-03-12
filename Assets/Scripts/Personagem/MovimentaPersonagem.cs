@@ -36,9 +36,16 @@ namespace Scripts.Personagem
         public Respiracao scriptResp;
 
         [Header("Sons")]
-        public AudioClip[] audiosPulo;
-        private AudioSource audioPulo;
+        public AudioClip[] audiosGerais;
+        private AudioSource audioPersonagem;
         private bool noAr;
+
+        [Header("Trava pulo")]
+        public Vector3 pontoContato;
+        public bool podePular;
+        RaycastHit hitContato;
+        public float anguloLimitePulo;
+        public float distanciaRaio;
 
         void Start()
         {
@@ -49,8 +56,27 @@ namespace Scripts.Personagem
             cansado = false;
             hp = 100f;
             cameraTransform = Camera.main.transform;
-            audioPulo = GetComponent<AudioSource>();
+            audioPersonagem = GetComponent<AudioSource>();
             noAr = false;
+        }
+
+        void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            pontoContato = hit.point;
+        }
+        void FixedUpdate()
+        {
+            if (Physics.Raycast(transform.position, -Vector3.up, out hitContato))
+            {
+                if (Vector3.Angle(hitContato.normal, Vector3.up) > anguloLimitePulo)
+                {
+                    podePular = false;
+                }
+                else
+                {
+                    podePular = true;
+                }
+            }
         }
 
 
@@ -86,8 +112,8 @@ namespace Scripts.Personagem
             if (estaNoChao && noAr)
             {
                 noAr = false;
-                audioPulo.clip = audiosPulo[1];
-                audioPulo.Play();
+                audioPersonagem.clip = audiosGerais[1];
+                audioPersonagem.Play();
             }
         }
         void Verificacoes()
@@ -150,11 +176,11 @@ namespace Scripts.Personagem
             {
                 Abaixa();
             }
-            if (Input.GetButtonDown("Jump") && estaNoChao)
+            if (Input.GetButtonDown("Jump") && estaNoChao && podePular)
             {
                 velocidadeCai.y = Mathf.Sqrt(alturaPulo * -2f * gravidade);
-                audioPulo.clip = audiosPulo[0];
-                audioPulo.Play();
+                audioPersonagem.clip = audiosGerais[0];
+                audioPersonagem.Play();
             }
         }
         void CondicaoDoPlayer()
@@ -186,6 +212,12 @@ namespace Scripts.Personagem
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawSphere(checaChao.position, raioEsfera);
+        }
+        public void SomDano()
+        {
+
+            audioPersonagem.clip = audiosGerais[2];
+            audioPersonagem.Play();
         }
     }
 }

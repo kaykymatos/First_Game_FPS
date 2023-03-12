@@ -89,27 +89,33 @@ namespace Scripts.Inimigo
         }
         public void AparecePedraPermanente()
         {
-            pedraPermanete.SetActive(true);
+            if (!estaMorto)
+                pedraPermanete.SetActive(true);
         }
 
         void VaiAtrasPlayer()
         {
-            navMesh.speed = velocidade;
-            if (distanciaPlayer < distanciaAtaque)
+            if (!estaMorto)
             {
-                navMesh.isStopped = true;
-                anim.SetBool("joga", true);
-                CorrigiRigEntra();
-                usaCurvaAnimacao = true;
-            }
-            else
-            {
-                pedraPermanete.SetActive(false);
-                navMesh.isStopped = false;
-                anim.SetBool("joga", false);
-                navMesh.SetDestination(player.transform.position);
-                CorrigeRigSai();
-                usaCurvaAnimacao = false;
+
+
+                navMesh.speed = velocidade;
+                if (distanciaPlayer < distanciaAtaque)
+                {
+                    navMesh.isStopped = true;
+                    anim.SetBool("joga", true);
+                    CorrigiRigEntra();
+                    usaCurvaAnimacao = true;
+                }
+                else
+                {
+                    pedraPermanete.SetActive(false);
+                    navMesh.isStopped = false;
+                    anim.SetBool("joga", false);
+                    navMesh.SetDestination(player.transform.position);
+                    CorrigeRigSai();
+                    usaCurvaAnimacao = false;
+                }
             }
         }
         void OlhaParaPlayer()

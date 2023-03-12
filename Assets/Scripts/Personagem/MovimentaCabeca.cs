@@ -28,7 +28,7 @@ namespace Scripts.Personagem
             posicaoMaoOrigem = mao.localPosition;
             posicaoCabecaOrigem = this.transform.localPosition;
         }
-        
+
         void Update()
         {
             float vertical = Input.GetAxis("Vertical");
