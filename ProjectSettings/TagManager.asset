@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Chao
+  - objArrasta
+  - objPegar
+  - UiManager
+  - cabecaDesliza
+  - inimigo
+  - missao
   layers:
   - Default
   - TransparentFX
@@ -12,10 +18,10 @@ TagManager:
   - Chao
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - morto
+  - item
+  - ItemJoga
+  - post
   - 
   - 
   - 
