@@ -1,5 +1,6 @@
 using Scripts.Inimigo;
 using Scripts.Managers;
+using Scripts.Personagem;
 using System.Collections;
 using UnityEngine;
 
@@ -40,7 +41,18 @@ namespace Scripts.Armas
         public bool automatico;
         public float numeroAleatorioMira;
         public float valorDaMira;
+        bool gancho;
+        public int modoDeTiro;
+        MovimentaPersonagem scriptPersonagem;
 
+        public ParticleSystem vento;
+
+        Camera cam;
+
+        private void Awake()
+        {
+            this.gameObject.SetActive(false);
+        }
         void Start()
         {
             estaAtirando = false;
@@ -50,36 +62,96 @@ namespace Scripts.Armas
             uiScript = GameObject.FindGameObjectWithTag("UiManager").GetComponent<UiManager>();
             movimentoArmacript = GetComponentInParent<MovimentaArma>();
             valorDaMira = 300;
+            modoDeTiro = 0;
+            gancho = false;
+            scriptPersonagem = GetComponentInParent<MovimentaPersonagem>();
+            cam = Camera.main;
+
         }
+     
 
         void Update()
         {
-            uiScript.municao.transform.position = Camera.main.WorldToScreenPoint(posUi.transform.position);
+
+            Debug.DrawRay(cam.transform.position, cam.transform.forward * 70, Color.red);
+            uiScript.municao.transform.position = cam.WorldToScreenPoint(posUi.transform.position);
             uiScript.municao.text = municao.ToString() + "/" + carregador.ToString();
             ModificaMira();
             if (anim.GetBool("OcorreAcao"))
             {
                 return;
             }
-            Automatico();
-            Atira();
-            Recarrega();
-            Mira();
+            ModoTiro();
+
+            if (!gancho)
+            {
+                Atira();
+                Recarrega();
+                Mira();
+            }
+            else if (gancho)
+            {
+                AtiraGancho();
+                EfeitoPuxando();
+            }
+
         }
-        void Automatico()
+        void ModificaFov(float fov)
         {
-            if (Input.GetKeyDown(KeyCode.Q))
+            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, fov, Time.deltaTime * 10);
+
+        }
+        void AtiraGancho()
+        {
+
+            if (Input.GetButtonDown("Fire1"))
+            {
+
+                if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit))
+                {
+                    scriptPersonagem.posicaoHitGancho = hit.point;
+                    scriptPersonagem.estado = MovimentaPersonagem.Estado.GanchoIndo;
+                }
+            }
+        }
+        void EfeitoPuxando()
+        {
+            if (scriptPersonagem.estado == MovimentaPersonagem.Estado.GanchoPuxando)
+            {
+                ModificaFov(85);
+                vento.Emit(1);
+            }
+            else
+            {
+                ModificaFov(60);
+                vento.Stop();
+            }
+        }
+        void ModoTiro()
+        {
+            if (Input.GetKeyDown(KeyCode.Q)&&scriptPersonagem.estado == MovimentaPersonagem.Estado.Normal)
             {
                 audioArma.clip = sonsArma[2];
                 audioArma.Play();
                 automatico = !automatico;
-                if (automatico)
+                if (modoDeTiro == 0)
                 {
+                    automatico = true;
+                    modoDeTiro++;
                     uiScript.imagemModoTiro.sprite = uiScript.modoTiro[1];
+                }
+                else if (modoDeTiro == 1)
+                {
+                    automatico = false;
+                    gancho = true;
+                    modoDeTiro++;
+                    uiScript.imagemModoTiro.sprite = uiScript.modoTiro[2];
                 }
                 else
                 {
+                    gancho = false;
                     uiScript.imagemModoTiro.sprite = uiScript.modoTiro[0];
+                    modoDeTiro = 0;
                 }
             }
         }
@@ -140,7 +212,7 @@ namespace Scripts.Armas
                 movimentoArmacript.valor = 0.01f;
                 uiScript.mira.gameObject.SetActive(false);
                 posUi.transform.localPosition = new Vector3(0f, 0.1f, -0.2f);
-                Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, 45, Time.deltaTime * 10);
+                ModificaFov(45);
 
             }
             else
@@ -150,7 +222,7 @@ namespace Scripts.Armas
                 uiScript.mira.gameObject.SetActive(true);
                 anim.SetBool("Mira", false);
                 posUi.transform.localPosition = new Vector3(-0.02f, 0.1f, -0.2f);
-                Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, 60, Time.deltaTime * 10);
+                ModificaFov(60);
             }
         }
         void InimigoVerificadorDano()
@@ -169,14 +241,14 @@ namespace Scripts.Armas
             float screenX = Screen.width / 2;
             float screenY = Screen.height / 2;
 
-            Ray ray = Camera.main.ScreenPointToRay(new Vector3(screenX, screenY));
+            Ray ray = cam.ScreenPointToRay(new Vector3(screenX, screenY));
             anim.Play("Atira");
 
             GameObject efeitoTiroObjeto = Instantiate(efeitoTiro, posEfeitoTiro.transform.position, posEfeitoTiro.transform.rotation);
             efeitoTiroObjeto.transform.parent = posEfeitoTiro.transform;
 
 
-            if (Physics.Raycast(new Vector3(ray.origin.x + Random.Range(-numeroAleatorioMira, numeroAleatorioMira), ray.origin.y + Random.Range(-numeroAleatorioMira, numeroAleatorioMira), ray.origin.z), Camera.main.transform.forward, out hit))
+            if (Physics.Raycast(new Vector3(ray.origin.x + Random.Range(-numeroAleatorioMira, numeroAleatorioMira), ray.origin.y + Random.Range(-numeroAleatorioMira, numeroAleatorioMira), ray.origin.z), cam.transform.forward, out hit))
             {
                 if (hit.transform.CompareTag("inimigo"))
                 {

@@ -48,6 +48,20 @@ namespace Scripts.Personagem
         public float anguloLimitePulo;
         public float distanciaRaio;
 
+        [Header("Gancho")]
+        public Vector3 posicaoHitGancho;
+        public Estado estado;
+        Vector3 velocidadeMomentanea;
+        public GameObject ganchoObj;
+        public GameObject paiGancho;
+
+        public enum Estado
+        {
+            Normal,
+            GanchoPuxando,
+            GanchoIndo,
+        }
+
         UiManager uiScript;
 
         void Start()
@@ -62,6 +76,7 @@ namespace Scripts.Personagem
             audioPersonagem = GetComponent<AudioSource>();
             noAr = false;
             uiScript = GameObject.FindGameObjectWithTag("UiManager").GetComponent<UiManager>();
+            estado = Estado.Normal;
         }
 
         void OnControllerColliderHit(ControllerColliderHit hit)
@@ -86,11 +101,65 @@ namespace Scripts.Personagem
 
         void Update()
         {
-            Verificacoes();
-            MovimentoAbaixa();
-            Inputs();
-            CondicaoDoPlayer();
-            SomPulo();
+            switch (estado)
+            {
+                case Estado.Normal:
+                    Movimenta();
+                    MovimentoAbaixa();
+                    Inputs();
+                    CondicaoDoPlayer();
+                    SomPulo();
+                    paiGancho.SetActive(false);
+                    ganchoObj.transform.parent = paiGancho.transform;
+                    ganchoObj.transform.position = Vector3.zero;
+                    break;
+                case Estado.GanchoIndo:
+                    ganchoObj.transform.parent = null;
+                    paiGancho.SetActive(true);
+                    Movimenta();
+                    GanchoMovimentando();
+                    break;
+                case Estado.GanchoPuxando:
+                    MovimentaPersonagemGancho();
+                    break;
+
+            }
+
+        }
+        void MovimentaPersonagemGancho()
+        {
+            float velocidadeMin = 10f;
+            float velocidadeMax = 40f;
+            Vector3 direcao = (posicaoHitGancho - transform.position).normalized;
+            float puxaVel = Mathf.Clamp(Vector3.Distance(transform.position, posicaoHitGancho), velocidadeMin, velocidadeMax);
+            controle.Move(direcao * puxaVel * Time.deltaTime * 2);
+
+            if (Vector3.Distance(transform.position, posicaoHitGancho) < 2)
+            {
+                estado = Estado.Normal;
+                paiGancho.SetActive(false);
+            }
+            if (RetornaPulo())
+            {
+                estado = Estado.Normal;
+                velocidadeMomentanea = (transform.forward*5) + transform.up*7;
+                paiGancho.SetActive(false);
+
+            }
+        }
+        bool RetornaPulo()
+        {
+            return Input.GetButtonDown("Jump");
+        }
+        void GanchoMovimentando()
+        {
+            ganchoObj.transform.LookAt(posicaoHitGancho);
+            ganchoObj.transform.position = Vector3.MoveTowards(ganchoObj.transform.position, posicaoHitGancho, 50 * Time.deltaTime);
+
+            if (ganchoObj.transform.position == posicaoHitGancho)
+            {
+                estado = Estado.GanchoPuxando;
+            }
         }
         void Abaixa()
         {
@@ -120,7 +189,7 @@ namespace Scripts.Personagem
                 audioPersonagem.Play();
             }
         }
-        void Verificacoes()
+        void Movimenta()
         {
             estaNoChao = Physics.CheckSphere(checaChao.position, raioEsfera, chaoMask);
 
@@ -133,6 +202,18 @@ namespace Scripts.Personagem
             float z = Input.GetAxis("Vertical");
 
             Vector3 move = (transform.right * x + transform.forward * z).normalized;
+
+            if (velocidadeMomentanea.magnitude >= 0f)
+            {
+                float movimentoPuxa = 3;
+                velocidadeMomentanea -= velocidadeMomentanea * movimentoPuxa * Time.deltaTime;
+
+                if (velocidadeMomentanea.magnitude <= 0.1f)
+                {
+                    velocidadeMomentanea = Vector3.zero;
+                }
+            }
+            move += velocidadeMomentanea;
 
             controle.Move(move * velocidade * Time.deltaTime);
 
@@ -180,7 +261,7 @@ namespace Scripts.Personagem
             {
                 Abaixa();
             }
-            if (Input.GetButtonDown("Jump") && estaNoChao && podePular)
+            if (RetornaPulo() && estaNoChao && podePular)
             {
                 velocidadeCai.y = Mathf.Sqrt(alturaPulo * -2f * gravidade);
                 audioPersonagem.clip = audiosGerais[0];
