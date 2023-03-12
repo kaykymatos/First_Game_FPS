@@ -18,6 +18,7 @@ namespace Scripts.Raycast
         public GameObject salvaObjeto;
 
         MovimentaPersonagem scriptMovimenta;
+        public Material objetoArrastaMaterial;
 
         void Start()
         {
@@ -60,6 +61,9 @@ namespace Scripts.Raycast
         }
         void Arrastar()
         {
+
+            objetoArrastaMaterial.SetColor("_Color", new Vector4(1f, 0, 0, 0.3f));
+            objetoArrastaMaterial.SetColor("_OutlineColor", new Vector4(0, 1, 0, 0));
             raycastScript.objArrastar.GetComponent<Rigidbody>().isKinematic = true;
             raycastScript.objArrastar.GetComponent<Rigidbody>().useGravity = false;
             raycastScript.objArrastar.transform.SetParent(transform);
@@ -69,6 +73,9 @@ namespace Scripts.Raycast
         }
         void Soltar()
         {
+            objetoArrastaMaterial.SetColor("_Color", new Vector4(1f, 0, 0, 1f));
+            objetoArrastaMaterial.SetColor("_OutlineColor", new Vector4(0, 1, 0, 1f));
+
             raycastScript.objArrastar.transform.localPosition = new Vector3(0, 0, 1.5f);
             raycastScript.objArrastar.transform.SetParent(null);
             raycastScript.objArrastar.GetComponent<Rigidbody>().isKinematic = false;

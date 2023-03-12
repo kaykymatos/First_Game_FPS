@@ -55,6 +55,7 @@ namespace Scripts.Inimigo
                 if (hp <= 0 && !estaMorto)
                 {
                     Morre();
+                    transform.gameObject.layer = 6;
                     objetoDesliza.SetActive(false);
                     estaMorto = true;
                     ParaDeAndar();
@@ -68,8 +69,7 @@ namespace Scripts.Inimigo
         }
         public void DaDanoPlayer()
         {
-            player.GetComponent<MovimentaPersonagem>().hp -= 10;
-            player.GetComponent<MovimentaPersonagem>().SomDano();
+            player.GetComponent<MovimentaPersonagem>().LevouDano(10);
 
         }
         void ParaDeAndar()
@@ -107,7 +107,7 @@ namespace Scripts.Inimigo
         }
         void CorrigeRigSai()
         {
-            regScript.rigid.isKinematic = false;
+            regScript.rigid.isKinematic = true;
         }
         void VaiAtrasPlayer()
         {
@@ -122,7 +122,6 @@ namespace Scripts.Inimigo
             }
             if (distanciaPlayer >= 3)
             {
-
                 anim.SetBool("paraAtaque", true);
             }
             if (anim.GetBool("podeAndar"))

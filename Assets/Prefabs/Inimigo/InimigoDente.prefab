@@ -535,7 +535,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemDrop: {fileID: 1728619453497436, guid: e7152d23c09aee845a9594ff1308f6a8, type: 3}
-  itemMissao: {fileID: 6506045230868956364, guid: b199825c2f29efe4f9661c5b98d1936e, type: 3}
+  itemMissao: {fileID: 8274851038603121788, guid: e5fa77f5a667f7e4d963e0cf78c9c083, type: 3}
 --- !u!1 &8268687571844124095
 GameObject:
   m_ObjectHideFlags: 0

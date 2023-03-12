@@ -1,3 +1,4 @@
+using Scripts.MissaoJogo;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Scripts.Managers
         public GameObject[] inimigos;
         public float tempo;
         public List<GameObject> listaInimigos = new();
+        Missao missaoScript;
 
         // Start is called before the first frame update
         void Start()
@@ -19,24 +21,39 @@ namespace Scripts.Managers
 
         void Update()
         {
-            tempo += Time.deltaTime;
-            if (tempo > 60)
+            if (!Missao.bossMorto)
             {
-                tempo = 0;
-
-                for (int i = 0; i < listaInimigos.Count; i++)
+                tempo += Time.deltaTime;
+                if (tempo > 60)
                 {
-                    if (listaInimigos[i] == null)
+                    tempo = 0;
+
+                    for (int i = 0; i < listaInimigos.Count; i++)
                     {
+                        if (listaInimigos[i] == null)
+                        {
+                            listaInimigos.RemoveAt(i);
+                        }
+                    }
+                    if (listaInimigos.Count < 20)
+                    {
+                        CriaInimigos();
+                    }
+
+
+                }
+
+            }
+            else if (Missao.bossMorto)
+            {
+                if (listaInimigos.Count > 0)
+                {
+                    for (int i = 0; i < listaInimigos.Count; i++)
+                    {
+                        Destroy(listaInimigos[i]);
                         listaInimigos.RemoveAt(i);
                     }
                 }
-                if (listaInimigos.Count < 20)
-                {
-                    CriaInimigos();
-                }
-
-
             }
         }
         void CriaInimigos()

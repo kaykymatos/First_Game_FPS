@@ -1,3 +1,4 @@
+using Scripts.Managers;
 using UnityEngine;
 
 namespace Scripts.Personagem
@@ -47,6 +48,8 @@ namespace Scripts.Personagem
         public float anguloLimitePulo;
         public float distanciaRaio;
 
+        UiManager uiScript;
+
         void Start()
         {
             controle = GetComponent<CharacterController>();
@@ -58,6 +61,7 @@ namespace Scripts.Personagem
             cameraTransform = Camera.main.transform;
             audioPersonagem = GetComponent<AudioSource>();
             noAr = false;
+            uiScript = GameObject.FindGameObjectWithTag("UiManager").GetComponent<UiManager>();
         }
 
         void OnControllerColliderHit(ControllerColliderHit hit)
@@ -213,11 +217,13 @@ namespace Scripts.Personagem
             Gizmos.color = Color.yellow;
             Gizmos.DrawSphere(checaChao.position, raioEsfera);
         }
-        public void SomDano()
+        public void LevouDano(int dano)
         {
+            hp -= dano;
 
             audioPersonagem.clip = audiosGerais[2];
             audioPersonagem.Play();
+            uiScript.imgMachuca.GetComponent<Animator>().Play("MachucaImg");
         }
     }
 }

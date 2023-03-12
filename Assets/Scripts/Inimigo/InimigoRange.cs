@@ -25,6 +25,8 @@ namespace Scripts.Inimigo
         public AudioClip[] sonsMonstro;
         public AudioSource audioMonstro;
 
+        public bool boss = false;
+
         void Start()
         {
             usaCurvaAnimacao = false;
@@ -49,7 +51,6 @@ namespace Scripts.Inimigo
                 if (hp <= 0)
                 {
                     StartCoroutine(SomeMorto());
-
                     estaMorto = true;
                     navMesh.isStopped = true;
                     navMesh.enabled = false;
@@ -61,7 +62,9 @@ namespace Scripts.Inimigo
                     usaCurvaAnimacao = false;
                     objetoDesliza.SetActive(false);
                     Morre();
-                    GetComponent<DropItem>().Dropa();
+                    transform.gameObject.layer = 6;
+                    if (!boss)
+                        GetComponent<DropItem>().Dropa();
                     pedraPermanete.SetActive(false);
 
                 }
